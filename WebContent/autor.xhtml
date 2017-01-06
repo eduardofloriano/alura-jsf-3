@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<ui:composition template="_template.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="autorId" value="#{autorBean.autor.id}" />
+		<f:viewAction action="#{autorBean.carregarPorId}"
+			if="#{param.autorId != null}" />
+	</f:metadata>
+
+
+
+	<ui:define name="titulo">Novo Autor</ui:define>
+	<ui:define name="conteudo">
+		<h:form id="form-cadastro-autor">
+
+			<p:messages id="messages" />
+
+			<p:fieldset legend="Dados do Autor">
+				<h:panelGrid columns="2">
+					<h:outputText value="Nome" for="nome" />
+					<p:inputText id="nome" value="#{autorBean.autor.nome}"
+						required="True" requiredMessage="Nome é Obrigatório">
+						<f:ajax event="blur" render="messages" />
+					</p:inputText>
+
+					<h:outputText value="Email" for="email" />
+					<p:inputText id="email" value="#{autorBean.autor.email}"
+						required="true">
+						<f:passThroughAttribute name="type" value="email" />
+						<!-- <f:passThroughAttribute name="required" value="true" />  -->
+					</p:inputText>
+
+				</h:panelGrid>
+
+			<p:commandButton value="Gravar" action="#{autorBean.gravar}"
+					update=":form-exibe-autor:tabelaAutores" />
+					
+			</p:fieldset>
+		</h:form>
+		<br />
+		<br />
+
+		<h:form id="form-exibe-autor">
+			<p:fieldset legend="Lista de Autores">
+
+				<p:dataList id="tabelaAutores" value="#{autorBean.autores}"
+					var="autor" type="definition">
+					
+					<p:commandButton id="alteraAutor" icon="fa fa-fw fa-edit"
+						action="#{autorBean.carregar(autor)}" update=":form-cadastro-autor" />
+					
+					<p:commandButton id="removeAutor" icon="fa fa-fw fa-remove"
+						action="#{autorBean.remover(autor)}" update="@form"/>
+
+					#{autor.nome} 	- 	#{autor.email}
+			    </p:dataList>
+
+			</p:fieldset>
+		</h:form>
+	</ui:define>
+	<!-- FIM DO CONTEUDO -->
+	<ui:define name="usuario-logado">
+		<!-- <h:outputText value="#{emailUsuario}" />  -->
+		<h:outputText value="#{sessionScope['usuarioLogado'].email}" />
+	</ui:define>
+</ui:composition>
+</html>

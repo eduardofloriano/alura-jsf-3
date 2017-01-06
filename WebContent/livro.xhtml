@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<ui:composition template="_template.xhtml">
+	<ui:define name="titulo">Novo Livro</ui:define>
+	<ui:define name="conteudo">
+		<h:form id="formTabelaAutores">
+			<h:messages id="messages" />
+			<p:fieldset legend="Dados do Livro">
+				<p:panelGrid columns="2">
+					<p:outputLabel value="Titulo" for="titulo" />
+					<p:inputText id="titulo" value="#{livroBean.livro.titulo}"
+						required="True" requiredMessage="Titulo é Obrigatório"
+						validatorMessage="Título não pode ser superior a 40 caracteres">
+						<f:validateLength maximum="40" />
+					</p:inputText>
+					<p:outputLabel value="Isbn" for="isbn" />
+					<p:inputMask id="isbn" value="#{livroBean.livro.isbn}"
+						validator="#{livroBean.validateCaracterInicial}"
+						mask="999-9-99-999999-9">
+					</p:inputMask>
+
+					<p:outputLabel value="Preço" for="preco" />
+					<p:inputNumber id="preco" value="#{livroBean.livro.preco}"
+						symbol=" R$" symbolPosition="s" decimalSeparator=","
+						thousandSeparator="."
+						validatorMessage="Preço deve ser entre 1.00 e 1.000" minValue="1"
+						maxValue="1000">
+						<p:ajax update="preco" />
+
+					</p:inputNumber>
+
+					<p:outputLabel value="Data de Lancamento" for="dataLancamento" />
+					<p:calendar id="dataLancamento"
+						value="#{livroBean.livro.dataLancamento}" pattern="dd/MM/yyyy"
+						timeZone="America/Sao_Paulo" />
+
+				</p:panelGrid>
+				<br />
+				<p:fieldset legend="Autores do Livro">
+					<p:panelGrid columns="4">
+						<p:outputLabel value="Selecione o Autor: " for="autor" />
+						<p:selectOneMenu id="autor" value="#{livroBean.autorId}">
+							<f:selectItems value="#{livroBean.autores}" var="autor"
+								itemLabel="#{autor.nome}" itemValue="#{autor.id}" />
+						</p:selectOneMenu>
+						<p:commandButton value="Gravar Autor"
+							action="#{livroBean.gravarAutor}" process="@this autor"
+							update="tabelaAutores">
+						</p:commandButton>
+						<p:commandLink value="Cadastrar Novo Autor"
+							action="#{livroBean.formAutor}" update="@all" immediate="true" />
+					</p:panelGrid>
+
+				</p:fieldset>
+
+				<br />
+
+				<p:fieldset legend="Dados dos Autores">
+					<p:dataTable id="tabelaAutores" value="#{livroBean.autoresDoLivro}"
+						emptyMessage="Nenhum Autor" var="autor">
+						<p:column>
+							<p:outputLabel value="#{autor.nome}" />
+						</p:column>
+						<p:column>
+							<p:commandButton id="removeAutor" value="X"
+								action="#{livroBean.removerAutor(autor)}" update="tabelaAutores"
+								process="@this" />
+						</p:column>
+					</p:dataTable>
+				</p:fieldset>
+
+				<br />
+
+				<p:commandButton value="Gravar" action="#{livroBean.gravar}"
+					update="@form :formTabelaLivros:tabelaLivros" process="@form" />
+
+
+			</p:fieldset>
+			<br />
+
+		</h:form>
+		<br />
+		<h:form id="formTabelaLivros">
+			<p:fieldset legend="Livros Gravados">
+				<p:dataTable id="tabelaLivros" value="#{livroBean.livroDataModelo}"
+					var="livro" paginator="true" paginatorPosition="bottom" rows="4" lazy="true">
+					<p:column headerText="Titulo" sortBy="#{livro.titulo}" filterBy="#{livro.titulo}" filterMatchMode="startsWith">						
+						<h:outputText id="livro_titulo" value="#{livro.titulo}" />
+					</p:column>
+					<p:column headerText="Isbn">						
+						<h:outputText id="livro_isbn" value="#{livro.isbn}" />
+					</p:column>
+					<p:column headerText="Preco">						
+						<h:outputText id="livro_preco" value="#{livro.preco}" />
+					</p:column>
+					<p:column headerText="Data de Lancamento">						
+						<h:outputText id="livro_dataLancamento"
+							value="#{livro.dataLancamento}">
+							<f:convertDateTime pattern="dd/MM/yyyy"
+								timeZone="America/Sao_Paulo" />
+						</h:outputText>
+					</p:column>
+					<p:column headerText="Alterar">						
+						<p:commandButton id="altera" value="Alterar"
+							action="#{livroBean.carregar(livro)}" update=":formTabelaAutores" />
+					</p:column>
+					<p:column headerText="Remover">						
+						<p:commandButton id="remove" value="Remove"
+							action="#{livroBean.remover(livro)}" update="tabelaLivros"/>
+					</p:column>
+				</p:dataTable>
+			</p:fieldset>
+		</h:form>
+	</ui:define>
+	<!-- FIM CONTEUDO -->
+	<ui:define name="usuario-logado">
+		<!-- <h:outputText value="#{emailUsuario}" />  -->
+		<h:outputText value="#{sessionScope['usuarioLogado'].email}" />
+	</ui:define>
+</ui:composition>
+</html>
