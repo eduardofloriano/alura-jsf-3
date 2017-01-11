@@ -3,11 +3,11 @@ package br.com.alura.livraria.bean;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
+import javax.faces.view.ViewScoped;
+import javax.inject.Named;
 import javax.persistence.EntityManager;
 
 import br.com.alura.livraria.dao.AutorDAO;
@@ -17,7 +17,7 @@ import br.com.alura.livraria.model.Livro;
 import br.com.alura.livraria.model.LivroDataModelo;
 import br.com.alura.livraria.util.JpaUtil;
 
-@ManagedBean(name = "livroBean")
+@Named
 @ViewScoped
 public class LivroBean {
 

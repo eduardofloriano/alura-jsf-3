@@ -2,15 +2,16 @@ package br.com.alura.livraria.bean;
 
 import java.util.List;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.view.ViewScoped;
+import javax.inject.Named;
 import javax.persistence.EntityManager;
 
 import br.com.alura.livraria.dao.AutorDAO;
 import br.com.alura.livraria.model.Autor;
 import br.com.alura.livraria.util.JpaUtil;
 
-@ManagedBean
+
+@Named
 @ViewScoped
 public class AutorBean {
 
