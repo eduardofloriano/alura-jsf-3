@@ -1,36 +1,58 @@
 package br.com.alura.livraria.dao;
 
+import java.io.Serializable;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 
 import br.com.alura.livraria.model.Autor;
+import br.com.alura.livraria.model.Livro;
 
-public class AutorDAO extends DAO<Autor> {
+public class AutorDAO implements Serializable{
 
+	private static final long serialVersionUID = 1L;
 	
-	public AutorDAO(EntityManager em){
-		this.em = em;
+	@Inject
+	protected EntityManager em;
+	private DAO<Autor> dao;
+	
+	@PostConstruct
+	public void init(){
+		this.dao = new DAO<Autor>(em, Autor.class);
 	}
 	
 	
-	public List<Autor> obterAutoresPorLivro( Autor autor){
-		
-		TypedQuery<Autor> query = em.createNamedQuery(Autor.OBTER_AUTORES_POR_LIVRO, Autor.class);
-		
-		//TODO: setar os parameters		
-		
-		return query.getResultList();
+	public List<Autor> obterAutoresPorLivro(){
+		return dao.findList(Autor.OBTER_AUTORES_POR_LIVRO);
 	}
 	
 	public List<Autor> obterTodosAutores(){
-		TypedQuery<Autor> query = em.createNamedQuery(Autor.OBTER_TODOS_AUTORES, Autor.class);
-		return query.getResultList();
+		return dao.findList(Autor.OBTER_TODOS_AUTORES);
+	}
+	
+	public List<Autor> obterAutoresDoLivro(Livro livro){	
+		return dao.findList(Livro.OBTER_AUTORES_DO_LIVRO);
 	}
 	
 	public Autor obterAutorPorId(Integer id){
-		return em.find(Autor.class, id);
+		return dao.find(id);
+		
+	}
+
+	public void persist(Autor autor) {
+		dao.persist(autor);
+		
+	}
+
+	public void merge(Autor autor) {
+		dao.merge(autor);
+		
+	}
+
+	public void remove(Autor autor) {
+		dao.remove(autor);
 		
 	}
 	

@@ -1,37 +1,42 @@
 package br.com.alura.livraria.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
-import javax.persistence.EntityManager;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import br.com.alura.livraria.dao.AutorDAO;
 import br.com.alura.livraria.dao.LivroDAO;
 import br.com.alura.livraria.model.Autor;
 import br.com.alura.livraria.model.Livro;
 import br.com.alura.livraria.model.LivroDataModelo;
-import br.com.alura.livraria.util.JpaUtil;
 
-@ManagedBean(name = "livroBean")
+@Named
 @ViewScoped
-public class LivroBean {
+public class LivroBean implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+	
 	private Livro livro = new Livro();
 	private List<Livro> livros;
 	private List<Autor> autores;
-	private LivroDataModelo livroDataModelo = new LivroDataModelo();
+	
+	@Inject
+	private LivroDataModelo livroDataModelo;
 
 	
 	private Integer autorId;
 
-	private EntityManager em = new JpaUtil().getEntityManager();
-	AutorDAO autorDAO = new AutorDAO(em);
-	LivroDAO livroDAO = new LivroDAO(em);
+	@Inject
+	AutorDAO autorDAO;
+	@Inject
+	LivroDAO livroDAO;
 
 	public List<Autor> getAutores() {
 		if (autores == null) {
@@ -57,7 +62,6 @@ public class LivroBean {
 	}
 
 	public List<Autor> getAutoresDoLivro() {
-		// return livroDAO.obterAutoresDoLivro(livro);
 		return livro.getAutores();
 	}
 

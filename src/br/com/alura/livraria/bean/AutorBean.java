@@ -1,21 +1,23 @@
 package br.com.alura.livraria.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
-import javax.persistence.EntityManager;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import br.com.alura.livraria.dao.AutorDAO;
 import br.com.alura.livraria.model.Autor;
-import br.com.alura.livraria.util.JpaUtil;
 
-@ManagedBean
+@Named
 @ViewScoped
-public class AutorBean {
+public class AutorBean implements Serializable {
 
-	private EntityManager em = new JpaUtil().getEntityManager();
-	private AutorDAO autorDAO = new AutorDAO(em);
+	private static final long serialVersionUID = 1L;
+
+	@Inject
+	private AutorDAO autorDAO;
 	
 	private Autor autor = new Autor();
 	private List<Autor> autores;

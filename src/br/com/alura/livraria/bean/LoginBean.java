@@ -1,21 +1,24 @@
 package br.com.alura.livraria.bean;
 
+import java.io.Serializable;
+
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.persistence.EntityManager;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import br.com.alura.livraria.dao.UsuarioDAO;
 import br.com.alura.livraria.model.Usuario;
-import br.com.alura.livraria.util.JpaUtil;
 
-@ManagedBean
+@Named
 @ViewScoped
-public class LoginBean {
+public class LoginBean implements Serializable{
 
-	private EntityManager em = new JpaUtil().getEntityManager();
-	private UsuarioDAO usuarioDAO = new UsuarioDAO(em);
+	private static final long serialVersionUID = 1L;
+	
+	@Inject
+	private UsuarioDAO usuarioDAO;
 
 	private Usuario usuario = new Usuario();
 
