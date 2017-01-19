@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 
 import br.com.alura.livraria.model.Autor;
 import br.com.alura.livraria.model.Livro;
+import br.com.alura.livraria.util.Log;
 
 public class AutorDAO implements Serializable{
 
@@ -40,17 +41,20 @@ public class AutorDAO implements Serializable{
 		return dao.find(id);
 		
 	}
-
+	
+	@Log
 	public void persist(Autor autor) {
 		dao.persist(autor);
 		
 	}
 
+	@Log
 	public void merge(Autor autor) {
 		dao.merge(autor);
 		
 	}
 
+	@Log
 	public void remove(Autor autor) {
 		dao.remove(autor);
 		

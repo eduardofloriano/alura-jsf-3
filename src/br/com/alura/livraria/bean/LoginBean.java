@@ -19,6 +19,9 @@ public class LoginBean implements Serializable{
 	
 	@Inject
 	private UsuarioDAO usuarioDAO;
+	
+	@Inject
+	private FacesContext context;
 
 	private Usuario usuario = new Usuario();
 
@@ -29,8 +32,6 @@ public class LoginBean implements Serializable{
 	public String autenticar() {
 
 		Usuario usuario = usuarioDAO.obterUsuarioPorEmail(this.usuario);
-
-		FacesContext context = FacesContext.getCurrentInstance();
 
 		if (usuario == null) {
 			context.addMessage(null,
@@ -47,7 +48,7 @@ public class LoginBean implements Serializable{
 	}
 
 	public String logout() {
-		FacesContext context = FacesContext.getCurrentInstance();
+
 		context.getExternalContext().getSessionMap().remove("usuarioLogado");
 
 		return "login.xhtml?faces-redirect=true";
